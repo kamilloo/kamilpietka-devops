@@ -1,0 +1,23 @@
+kamilpietka.dev {
+    root * /srv/portfolio
+    file_server
+}
+
+www.kamilpietka.dev {
+    redir https://kamilpietka.dev{uri} permanent
+}
+
+vouchers.kamilpietka.dev {
+    reverse_proxy vouchers-frontend:3000
+}
+
+api-vouchers.kamilpietka.dev {
+    reverse_proxy vouchers-api:8000
+}
+
+mojabiblioteka.kamilpietka.dev,
+mojabiblioteka.app,
+www.mojabiblioteka.app {
+    root * /srv/mojabiblioteka
+    file_server
+}

@@ -1,0 +1,5 @@
+.env
+vouchers-api.env
+*.log
+.DS_Store
+.idea/

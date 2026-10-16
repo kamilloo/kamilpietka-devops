@@ -1,0 +1,45 @@
+services:
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./site:/srv/portfolio:ro
+      - ./mojabiblioteka:/srv/mojabiblioteka:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - vouchers-frontend
+      - vouchers-api
+    networks:
+      - web
+
+  vouchers-frontend:
+    image: ${VOUCHERS_FRONTEND_IMAGE}
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      VITE_API_URL: https://api-vouchers.kamilpietka.dev
+    networks:
+      - web
+
+  vouchers-api:
+    image: ${VOUCHERS_API_IMAGE}
+    restart: unless-stopped
+    expose:
+      - "8000"
+    env_file:
+      - ./vouchers-api.env
+    networks:
+      - web
+
+networks:
+  web:
+
+volumes:
+  caddy_data:
+  caddy_config:
