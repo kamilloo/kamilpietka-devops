@@ -8,7 +8,7 @@ www.kamilpietka.dev {
 }
 
 vouchers.kamilpietka.dev {
-    reverse_proxy vouchers-frontend:3000
+    reverse_proxy vouchers-frontend:80
 }
 
 api-vouchers.kamilpietka.dev {

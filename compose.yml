@@ -21,7 +21,7 @@ services:
     image: ${VOUCHERS_FRONTEND_IMAGE}
     restart: unless-stopped
     expose:
-      - "3000"
+      - "80"
     environment:
       VITE_API_URL: https://api-vouchers.kamilpietka.dev
     networks:
