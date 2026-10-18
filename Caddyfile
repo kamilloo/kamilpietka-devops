@@ -12,7 +12,7 @@ vouchers.kamilpietka.dev {
 }
 
 api-vouchers.kamilpietka.dev {
-    reverse_proxy vouchers-api:8000
+    reverse_proxy vouchers-nginx:80
 }
 
 mojabiblioteka.kamilpietka.dev,
