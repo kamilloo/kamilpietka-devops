@@ -19,6 +19,10 @@ The VPS currently serves:
 
 The three Moja Biblioteka hostnames do **not** redirect between each other. Caddy serves all of them from the same `/srv/mojabiblioteka` directory.
 
+## Deployment case study
+
+[Read the production deployment case study](docs/production-case-study.md) — architecture, migration decisions, legacy build troubleshooting, Docker isolation, and observed validation.
+
 ## Architecture
 
 ```text
@@ -39,11 +43,11 @@ Caddy :80 / :443
    |
    +-- vouchers.kamilpietka.dev
    |      |
-   |      +-- vouchers-frontend:3000
+   |      +-- vouchers-frontend:80
    |
    +-- api-vouchers.kamilpietka.dev
    |      |
-   |      +-- vouchers-api:8000
+   |      +-- vouchers-nginx:80
    |
    +-- mojabiblioteka.kamilpietka.dev
    +-- mojabiblioteka.app
@@ -70,7 +74,13 @@ Public Internet
       +-----------------------------+
       |                             |
       v                             v
-vouchers-frontend:3000        vouchers-api:8000
+vouchers-frontend:80        vouchers-nginx:80
+                                      |
+                                      v
+                               vouchers-api:9000
+                                      |
+                                      v
+                                vouchers-db:3306
 
 Static mounts:
   /srv/portfolio
@@ -166,7 +176,7 @@ The host directory is mounted from:
 `vouchers.kamilpietka.dev` is reverse proxied to:
 
 ```text
-vouchers-frontend:3000
+vouchers-frontend:80
 ```
 
 The frontend should use the production API URL:
@@ -180,8 +190,10 @@ https://api-vouchers.kamilpietka.dev
 `api-vouchers.kamilpietka.dev` is reverse proxied to:
 
 ```text
-vouchers-api:8000
+vouchers-nginx:80
 ```
+
+Caddy proxies HTTP to `vouchers-nginx:80`; Nginx forwards PHP requests to `vouchers-api:9000`. The API uses private MySQL service `vouchers-db:3306` on the internal backend network. Laravel public files are copied from the API image into a shared volume by `vouchers-public-init`.
 
 The Laravel production environment is stored separately in `vouchers-api.env`, which must not be committed.
 

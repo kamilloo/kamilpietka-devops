@@ -116,6 +116,9 @@ rsync -avz --delete \
 
 ## Update Vouchers
 
+The current stack uses the Docker Hub `kamilloo20` image namespace and includes `vouchers-frontend`, `vouchers-nginx`, `vouchers-api`, `vouchers-db`, and a one-shot `vouchers-public-init` service. When the backend image changes, rerun the initializer to refresh the public-assets volume and recreate the API Nginx container as appropriate. Do not use `docker compose down -v` on production: it would remove the database volume.
+
+
 Update image tags in `.env` if necessary, then:
 
 ```bash
@@ -144,8 +147,8 @@ Prefer immutable image tags.
 Example:
 
 ```env
-VOUCHERS_FRONTEND_IMAGE=ghcr.io/kamilloo/vouchers-app:2026-10-16
-VOUCHERS_API_IMAGE=ghcr.io/kamilloo/vouchers:2026-10-16
+VOUCHERS_FRONTEND_IMAGE=kamilloo20/vouchers-app:VERSION_TAG
+VOUCHERS_API_IMAGE=kamilloo20/vouchers:VERSION_TAG
 ```
 
 To roll back:
