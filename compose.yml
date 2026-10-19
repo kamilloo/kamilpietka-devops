@@ -8,8 +8,8 @@ services:
       - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./site:/srv/portfolio:ro
-      - ./mojabiblioteka:/srv/mojabiblioteka:ro
+      - /opt/portfolio/site:/srv/portfolio:ro
+      - /opt/portfolio/mojabiblioteka:/srv/mojabiblioteka:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
